@@ -302,6 +302,7 @@
           inputSaladas: [],
           inputMolhos: [],
           inputHamburguers: "",
+          novoPedidoAssincrono: null,
 
           inputNome: "",
           inputEndereco: "",
@@ -389,7 +390,11 @@
             if (this.inputNome && this.inputEndereco) {
               this.page = 3;
               //Pode realizar uma requisição http enviando os dadods do pedido para o back-end da aplicação
-              setTimeout(() => this.novoPedido(), 5000);
+
+              this.novoPedidoAssincrono = setTimeout(
+                () => this.novoPedido(),
+                5000
+              );
             } else {
               this.alert = "Você precisa informar o seu nome e/ou endereço!";
               this.toast.show();
@@ -406,6 +411,15 @@
             this.inputEndereco = "";
 
             this.alert = "";
+          },
+        },
+        watch: {
+
+          //No metodo watch eu assisto se "page" vai receber um novo valor que seja igual a 1 se ele for igual a 1 ele irá limpar o setTimeout
+          page(novoValor) {
+            if (novoValor == 1) {
+              clearTimeout(this.novoPedidoAssincrono);
+            }
           },
         },
       });
